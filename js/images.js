@@ -46,8 +46,7 @@ const IMAGE_PATHS = [
   "https://raw.githubusercontent.com/Wobum/random-image-api/main/images/image_090.jpg",
   "https://raw.githubusercontent.com/Wobum/random-image-api/main/images/image_092.jpg",
   "https://raw.githubusercontent.com/Wobum/random-image-api/main/images/image_093.jpg",
-  "https://raw.githubusercontent.com/Wobum/random-image-api/main/images/image_094.jpg",
-  "https://raw.githubusercontent.com/Wobum/random-image-api/main/images/下载.jpg"
+  "https://raw.githubusercontent.com/Wobum/random-image-api/main/images/image_094.jpg"
 ];
 
 function getRandomImage() {
