@@ -1,0 +1,53 @@
+name: Update Image List
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  update-list:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Scan images directory
+        id: scan
+        run: |
+          echo "Scanning images directory..."
+          
+          # 创建图片列表
+          echo "// 图片列表 - 由 GitHub Actions 自动生成" > js/images.js
+          echo "// 不要手动修改此文件" >> js/images.js
+          echo "" >> js/images.js
+          echo "const IMAGE_PATHS = [" >> js/images.js
+          
+          # 扫描所有 jpg 和 jpeg 文件
+          first=true
+          for file in $(find images -type f $ -iname "*.jpg" -o -iname "*.jpeg" $ | sort); do
+            filename=$(basename "$file")
+            filepath="${file#images/}"
+            
+            if [ "$first" = true ]; then
+              first=false
+            else
+              echo "  ," >> js/images.js
+            fi
+            
+            echo -n "  \"https://raw.githubusercontent.com/${{ github.repository }}/main/$file\"" >> js/images.js
+          done
+          
+          echo "" >> js/images.js
+          echo "];" >> js/images.js
+          
+          echo "Total images: $(find images -type f $ -iname "*.jpg" -o -iname "*.jpeg" $ | wc -l)"
+          
+      - name: Commit and push
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add js/images.js
+          git diff --staged --quiet || git commit -m "🤖 Auto-update image list $(date +'%Y-%m-%d %H:%M:%S')"
+          git push
