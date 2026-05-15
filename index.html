@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>随机图片 API</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+        
+        .image-display {
+            background: #f5f5f5;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .image-display img {
+            max-width: 100%;
+            max-height: 350px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+        
+        .placeholder {
+            color: #999;
+            font-size: 1.2em;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        button {
+            padding: 12px 30px;
+            font-size: 1em;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        
+        .info {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .info code {
+            background: #eee;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: Consolas, monospace;
+        }
+        
+        .stats {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #888;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎲 随机图片 API</h1>
+        
+        <div class="stats" id="stats">加载中...</div>
+        
+        <div class="image-display" id="imageDisplay">
+            <div class="placeholder">点击按钮获取随机图片</div>
+        </div>
+        
+        <div class="btn-group">
+            <button class="btn-primary" onclick="getRandomImage()">🎲 随机一张</button>
+            <button class="btn-secondary" onclick="openInNewTab()">🆕 新窗口打开</button>
+            <button class="btn-secondary" onclick="copyUrl()">📋 复制链接</button>
+        </div>
+        
+        <div class="info">
+            <p><strong>API 调用方式：</strong></p>
+            <p>直接链接：<code id="directUrl">加载中...</code></p>
+            <p>Markdown：<code id="markdownUrl">加载中...</code></p>
+        </div>
+    </div>
+    
+    <script src="js/images.js"></script>
+    <script>
+        let currentImage = null;
+        
+        function getRandomImage() {
+            if (IMAGE_PATHS.length === 0) {
+                document.getElementById('imageDisplay').innerHTML = 
+                    '<div class="placeholder">暂无图片，请先上传图片到 images 文件夹</div>';
+                return;
+            }
+            
+            const index = Math.floor(Math.random() * IMAGE_PATHS.length);
+            currentImage = IMAGE_PATHS[index];
+            
+            const imageDisplay = document.getElementById('imageDisplay');
+            imageDisplay.innerHTML = `<img src="${currentImage}" alt="随机图片" 
+                onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22><text x=%2250%%22 y=%2250%%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2240%22>🖼️</text></svg>'">`;
+            
+            document.getElementById('directUrl').textContent = currentImage;
+            document.getElementById('markdownUrl').textContent = `![随机图片](${currentImage})`;
+        }
+        
+        function openInNewTab() {
+            if (!currentImage) {
+                getRandomImage();
+            }
+            window.open(currentImage, '_blank');
+        }
+        
+        function copyUrl() {
+            if (!currentImage) {
+                getRandomImage();
+            }
+            navigator.clipboard.writeText(currentImage).then(() => {
+                alert('链接已复制到剪切板！');
+            });
+        }
+        
+        function updateStats() {
+            document.getElementById('stats').textContent = 
+                `共 ${IMAGE_PATHS.length} 张图片`;
+        }
+        
+        // 初始化
+        updateStats();
+    </script>
+</body>
+</html>
