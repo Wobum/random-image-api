@@ -47,7 +47,6 @@ const IMAGE_PATHS = [
   "https://raw.githubusercontent.com/Wobum/random-image-api/main/images/image_092.jpg",
   "https://raw.githubusercontent.com/Wobum/random-image-api/main/images/image_093.jpg",
   "https://raw.githubusercontent.com/Wobum/random-image-api/main/images/image_094.jpg",
-  "https://raw.githubusercontent.com/Wobum/random-image-api/main/images/wallhaven-3lv8j6.jpg",
   "https://raw.githubusercontent.com/Wobum/random-image-api/main/images/wallhaven-l8emgq.jpg",
   "https://raw.githubusercontent.com/Wobum/random-image-api/main/images/wallhaven-rrvd3q.jpg",
   "https://raw.githubusercontent.com/Wobum/random-image-api/main/images/下载.jpg"
