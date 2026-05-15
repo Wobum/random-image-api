@@ -7,7 +7,7 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html, body { width: 100%; height: 100%; overflow: hidden; background: #000; }
-        #imageContainer { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; flex-direction: column; }
+        #imageContainer { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; }
         #imageContainer img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 10px; }
         #info { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); color: white; font-family: sans-serif; font-size: 14px; opacity: 0.7; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
         #refreshBtn { position: fixed; top: 20px; right: 20px; width: 60px; height: 60px; border-radius: 50%; background: rgba(255,255,255,0.2); border: none; color: white; font-size: 24px; cursor: pointer; backdrop-filter: blur(10px); }
@@ -15,38 +15,27 @@
     </style>
 </head>
 <body>
-    <div id="imageContainer">
-        <div class="loading">生成中...</div>
-    </div>
+    <div id="imageContainer"><div class="loading">生成中...</div></div>
     <div id="info">长按图片保存</div>
     <button id="refreshBtn">🔄</button>
-    
     <script>
-        let count = 0;
-        
         function loadRandomImage() {
-            count++;
             document.getElementById('imageContainer').innerHTML = '<div class="loading">生成中...</div>';
-            
-            const timestamp = new Date().getTime();
-            const imgUrl = `https://thispersondoesnotexist.com/image?${timestamp}`;
-            
+            const timestamp = Date.now();
+            const imgUrl = `https://images.weserv.nl/?url=thispersondoesnotexist.com/image?t=${timestamp}&w=800`;
             const img = new Image();
             img.onload = function() {
                 document.getElementById('imageContainer').innerHTML = '';
                 document.getElementById('imageContainer').appendChild(img);
-                document.getElementById('info').textContent = `已生成 ${count} 张 · 长按保存`;
+                document.getElementById('info').textContent = 'AI 人脸 · 长按保存';
             };
             img.onerror = function() {
-                document.getElementById('imageContainer').innerHTML = 
-                    '<div class="loading">生成失败<br><br><button onclick="loadRandomImage()" style="padding:10px 20px;font-size:16px;cursor:pointer;">重试</button></div>';
+                document.getElementById('imageContainer').innerHTML = '<div class="loading">生成失败<br><button onclick="loadRandomImage()" style="margin-top:20px;padding:10px 20px;">重试</button></div>';
             };
             img.src = imgUrl;
-            img.alt = 'AI 生成人脸';
             img.style.cursor = 'pointer';
             img.onclick = loadRandomImage;
         }
-        
         document.getElementById('refreshBtn').onclick = loadRandomImage;
         loadRandomImage();
     </script>
