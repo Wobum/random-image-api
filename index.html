@@ -3,38 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AI 随机人脸</title>
+    <title>随机图片</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html, body { width: 100%; height: 100%; overflow: hidden; background: #000; }
         #imageContainer { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; }
-        #imageContainer img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 10px; }
+        #imageContainer img { max-width: 100%; max-height: 100%; object-fit: contain; -webkit-user-select: none; user-select: none; }
         #info { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); color: white; font-family: sans-serif; font-size: 14px; opacity: 0.7; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
         #refreshBtn { position: fixed; top: 20px; right: 20px; width: 60px; height: 60px; border-radius: 50%; background: rgba(255,255,255,0.2); border: none; color: white; font-size: 24px; cursor: pointer; backdrop-filter: blur(10px); }
-        .loading { color: #999; font-size: 16px; }
     </style>
 </head>
 <body>
-    <div id="imageContainer"><div class="loading">生成中...</div></div>
+    <div id="imageContainer"><div style="color: #999;">加载中...</div></div>
     <div id="info">长按图片保存</div>
     <button id="refreshBtn">🔄</button>
+    <script src="js/images.js?v=2026051601"></script>
     <script>
         function loadRandomImage() {
-            document.getElementById('imageContainer').innerHTML = '<div class="loading">生成中...</div>';
-            const timestamp = Date.now();
-            const imgUrl = `https://images.weserv.nl/?url=thispersondoesnotexist.com/image?t=${timestamp}&w=800`;
-            const img = new Image();
-            img.onload = function() {
-                document.getElementById('imageContainer').innerHTML = '';
-                document.getElementById('imageContainer').appendChild(img);
-                document.getElementById('info').textContent = 'AI 人脸 · 长按保存';
-            };
-            img.onerror = function() {
-                document.getElementById('imageContainer').innerHTML = '<div class="loading">生成失败<br><button onclick="loadRandomImage()" style="margin-top:20px;padding:10px 20px;">重试</button></div>';
-            };
-            img.src = imgUrl;
-            img.style.cursor = 'pointer';
-            img.onclick = loadRandomImage;
+            if (!IMAGE_PATHS || IMAGE_PATHS.length === 0) {
+                document.getElementById('imageContainer').innerHTML = '<div style="color: #999;">暂无图片</div>';
+                document.getElementById('info').textContent = '';
+                return;
+            }
+            const index = Math.floor(Math.random() * IMAGE_PATHS.length);
+            document.getElementById('imageContainer').innerHTML = `<img src="${IMAGE_PATHS[index]}" alt="随机图片">`;
+            document.getElementById('info').textContent = `第 ${index + 1}/${IMAGE_PATHS.length} 张`;
         }
         document.getElementById('refreshBtn').onclick = loadRandomImage;
         loadRandomImage();
