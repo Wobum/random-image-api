@@ -84,3 +84,4 @@ random-image-api/
 - GitHub Pages 有流量限制（每月 100GB）
 - 单个文件建议小于 25MB
 - 仓库总大小建议小于 1GB
+- 测试
